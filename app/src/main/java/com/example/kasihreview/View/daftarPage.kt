@@ -2,9 +2,11 @@ package com.example.kasihreview.View
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,16 +29,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.kasihreview.NavObjects.loginPage
 import com.example.kasihreview.R
 import com.example.kasihreview.ui.theme.OpenSans
 
 @Composable
-@Preview
-fun daftarPage(){
+fun daftarPage(navController: NavController){
     var userNameInput by remember {
         mutableStateOf("")
     }
@@ -139,6 +143,7 @@ fun daftarPage(){
                 shape = RoundedCornerShape(30.dp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
+                    focusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
                     focusedIndicatorColor = Color.Transparent,   // no line when focused
                     unfocusedIndicatorColor = Color.Transparent, // no line when not focused
                     disabledIndicatorColor = Color.Transparent   // no line when disabled
@@ -174,9 +179,16 @@ fun daftarPage(){
                 onValueChange = { change ->
                     userEmailInput = change
                 },
+                textStyle = TextStyle(
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.50f)
+                ),
                 shape = RoundedCornerShape(30.dp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
+                    focusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
                     focusedIndicatorColor = Color.Transparent,   // no line when focused
                     unfocusedIndicatorColor = Color.Transparent, // no line when not focused
                     disabledIndicatorColor = Color.Transparent   // no line when disabled
@@ -212,6 +224,12 @@ fun daftarPage(){
                 onValueChange = { change ->
                     userPwInput = change
                 },
+                textStyle = TextStyle(
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.50f)
+                ),
                 shape = RoundedCornerShape(30.dp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
@@ -275,15 +293,32 @@ fun daftarPage(){
                     .height(20.dp)
             )
 
-            Text(
-                text = "Sudah punya akun? Pergi ke halaman Masuk",
-                fontFamily = OpenSans,
-                fontWeight = FontWeight.Normal,
-                fontSize = 9.sp,
-                color = Color(0xFFE9A6A6),
+            Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-            )
+            ) {
+                Text(
+                    text = "Sudah punya akun? Pergi ke halaman ",
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 9.sp,
+                    color = Color(0xFFE9A6A6),
+
+                    )
+
+                Text(
+                    text = "Masuk",
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 9.sp,
+                    color = Color(0xFF9C4A8B),
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(loginPage)
+                        }
+                )
+            }
+
         }
 
 
