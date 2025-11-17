@@ -24,32 +24,7 @@ import coil.compose.AsyncImage
 import com.example.kasihreview.Model.genre
 import com.example.kasihreview.ViewModel.KRviewModel
 
-data class GenreDetails(
-    var id: Int,
-    var name: String
-)
 
-val genreList: List<GenreDetails> = listOf(
-    GenreDetails(id = 28, name = "Action"),
-    GenreDetails(id = 12, name = "Adventure"),
-    GenreDetails(id = 16, name = "Animation"),
-    GenreDetails(id = 35, name = "Comedy"),
-    GenreDetails(id = 80, name = "Crime"),
-    GenreDetails(id = 99, name = "Documentary"),
-    GenreDetails(id = 18, name = "Drama"),
-    GenreDetails(id = 10751, name = "Family"),
-    GenreDetails(id = 14, name = "Fantasy"),
-    GenreDetails(id = 36, name = "History"),
-    GenreDetails(id = 27, name = "Horror"),
-    GenreDetails(id = 10402, name = "Music"),
-    GenreDetails(id = 9648, name = "Mystery"),
-    GenreDetails(id = 10749, name = "Romance"),
-    GenreDetails(id = 878, name = "Science Fiction"),
-    GenreDetails(id = 10770, name = "TV Movie"),
-    GenreDetails(id = 53, name = "Thriller"),
-    GenreDetails(id = 10752, name = "War"),
-    GenreDetails(id = 37, name = "Western")
-)
 
 
 @Composable

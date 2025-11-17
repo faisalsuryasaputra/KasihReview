@@ -9,19 +9,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kasihreview.ViewModel.KRviewModel
+import com.example.kasihreview.ui.theme.OpenSans
 
 @Composable
 fun genreButton(genreDetails: GenreDetails, VM: KRviewModel){
-    var containerColor by remember { mutableStateOf(0xFFFFFFFF) }
+    var containerColor by remember { mutableStateOf(0xFF9C4A8B) }
     Button(
         onClick = {
-            if (containerColor == 0xFFFFFFFF) {
+            if (containerColor == 0xFF9C4A8B) {
                 containerColor = 0xFFE9A6A6
                 VM.addGenre(genreDetails)
             }else{
-                containerColor = 0xFFFFFFFF
+                containerColor = 0xFF9C4A8B
                 VM.removeGenre(genreDetails)
             }
         },
@@ -32,6 +34,10 @@ fun genreButton(genreDetails: GenreDetails, VM: KRviewModel){
             disabledContentColor = Color.White
         )
     ) {
-        Text(text = genreDetails.name)
+        Text(
+            text = genreDetails.name,
+            fontFamily = OpenSans,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }

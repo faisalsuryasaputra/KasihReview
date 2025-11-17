@@ -30,19 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.daftarPage
 import com.example.kasihreview.R
-import com.example.kasihreview.Security.Hash
 import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
 
@@ -76,7 +71,7 @@ fun loginPage(navController: NavController, viewModel: KRviewModel){
                 .align(Alignment.Center)
         ) {
             Image(
-                painter = painterResource(R.drawable.logo),
+                painter = painterResource(R.drawable.logohifi),
                 contentDescription = "foto logo",
                 modifier = Modifier
                     .width(67.dp)

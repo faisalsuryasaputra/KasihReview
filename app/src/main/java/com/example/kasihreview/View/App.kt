@@ -14,6 +14,7 @@ import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.MovieDetails
 import com.example.kasihreview.NavObjects.daftarPage
 import com.example.kasihreview.NavObjects.loginPage
+import com.example.kasihreview.NavObjects.searchPage
 import com.example.kasihreview.ViewModel.KRviewModel
 
 @Composable
@@ -34,7 +35,7 @@ fun app(){
         },
         bottomBar = {
             if (currentRoute !in noHeaderRoutes) {
-                bottomBar()
+                bottomBar(navController)
             }
         }
     ) {innerPadding ->
@@ -55,6 +56,9 @@ fun app(){
             }
             composable<MovieDetails>{
                 movieDetails(navController,VM)
+            }
+            composable<searchPage>{
+                searchPage(navController, VM)
             }
         }
     }

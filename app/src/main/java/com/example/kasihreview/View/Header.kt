@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.kasihreview.R
 
 @Composable
-@Preview
 fun header(){
     Row(
         verticalAlignment = Alignment.CenterVertically,

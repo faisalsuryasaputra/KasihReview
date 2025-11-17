@@ -21,6 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.example.kasihreview.NavObjects.HomePage
+import com.example.kasihreview.NavObjects.searchPage
 import com.example.kasihreview.R
 
 data class BottomNavBar(
@@ -32,7 +35,7 @@ data class BottomNavBar(
 )
 @Composable
 
-fun bottomBar(){
+fun bottomBar(navController: NavController){
 
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
 
@@ -65,6 +68,11 @@ fun bottomBar(){
                 selected = selectedIndex == index,
                 onClick = {
                     selectedIndex = index
+                    if (selectedIndex == 0) {
+                        navController.navigate(HomePage)
+                    }else if (selectedIndex == 1) {
+                        navController.navigate(searchPage)
+                    }
                 },
                 label = {
                     //Text(text = bottomNavBar.title)
