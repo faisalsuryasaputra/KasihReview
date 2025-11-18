@@ -2,8 +2,10 @@ package com.example.kasihreview.View
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,6 +35,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.Movies
+import com.example.kasihreview.NavObjects.HomePage
+import com.example.kasihreview.NavObjects.UlasanPage
 import com.example.kasihreview.R
 import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
@@ -70,7 +76,9 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                 )
 
                 Button(
-                    onClick = {},
+                    onClick = {
+                        navController.navigate(UlasanPage)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFE9A6A6),
                         contentColor = Color.White,
@@ -218,11 +226,106 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
             modifier = Modifier
                 .height(10.dp)
         )
+
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(Color.White.copy(0.19f))
         )
+
+        Spacer(
+            modifier = Modifier
+                .height(10.dp)
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(80.dp)
+        ){
+            Text(
+                text = "Semua Ulasan",
+                fontFamily = OpenSans,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                color = Color.White,
+                modifier = Modifier
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFE9A6A6),
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .height(35.dp)
+                        .width(108.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFE9A6A6),
+                            shape = RoundedCornerShape(17.5.dp)
+                        )
+                        .clip(RoundedCornerShape(17.5.dp)), // penting
+                    shape = RoundedCornerShape(17.5.dp),
+                    contentPadding = PaddingValues(0.dp) // hilangin gap
+                ) {
+                    Text(
+                        text = "Non-Spoiler",
+                        fontFamily = OpenSans,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp,
+                        color = Color.Black,
+                    )
+                }
+
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFE9A6A6),
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier
+                        .height(35.dp)
+                        .width(108.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFE9A6A6),
+                            shape = RoundedCornerShape(17.5.dp)
+                        )
+                        .clip(RoundedCornerShape(17.5.dp)), // penting
+                    shape = RoundedCornerShape(17.5.dp),
+                    contentPadding = PaddingValues(0.dp) // hilangin gap
+                ) {
+                    Text(
+                        text = "Spoiler",
+                        fontFamily = OpenSans,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp,
+                        color = Color.Black,
+                    )
+                }
+            }
+
+
+
+        }
+
+        Spacer(
+            modifier = Modifier
+                .height(10.dp)
+        )
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(count = 10) {
+                ulasanPrev()
+            }
+        }
+
     }
 }

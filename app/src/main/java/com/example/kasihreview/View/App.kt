@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.MovieDetails
+import com.example.kasihreview.NavObjects.UlasanPage
 import com.example.kasihreview.NavObjects.daftarPage
 import com.example.kasihreview.NavObjects.loginPage
 import com.example.kasihreview.NavObjects.searchPage
@@ -59,6 +60,9 @@ fun app(){
             }
             composable<searchPage>{
                 searchPage(navController, VM)
+            }
+            composable<UlasanPage>{
+                ulasanPage(navController, VM)
             }
         }
     }
