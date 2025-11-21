@@ -50,7 +50,7 @@ fun app(){
                 loginPage(navController, VM)
             }
             composable<daftarPage>{
-                daftarPage(navController)
+                daftarPage(navController, VM)
             }
             composable<HomePage>{
                 homePage(navController,VM)

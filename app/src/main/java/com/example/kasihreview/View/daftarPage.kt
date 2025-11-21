@@ -34,12 +34,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.NavObjects.loginPage
 import com.example.kasihreview.R
+import com.example.kasihreview.Security.Hash
+import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
 
 @Composable
-fun daftarPage(navController: NavController){
+fun daftarPage(navController: NavController, VM: KRviewModel){
+
+    val hash = Hash()
+
     var userNameInput by remember {
         mutableStateOf("")
     }
@@ -139,6 +145,12 @@ fun daftarPage(navController: NavController){
                 onValueChange = { change ->
                     userNameInput = change
                 },
+                textStyle = TextStyle(
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.50f)
+                ),
                 shape = RoundedCornerShape(30.dp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
@@ -232,7 +244,8 @@ fun daftarPage(navController: NavController){
                 shape = RoundedCornerShape(30.dp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
-                    focusedIndicatorColor = Color.Transparent,   // no line when focused
+                    focusedContainerColor = Color(0xFFC4C4C4).copy(alpha = 0.35f),
+                    focusedIndicatorColor = Color.Transparent,// no line when focused
                     unfocusedIndicatorColor = Color.Transparent, // no line when not focused
                     disabledIndicatorColor = Color.Transparent   // no line when disabled
                 ),
@@ -268,7 +281,22 @@ fun daftarPage(navController: NavController){
                     .height(20.dp)
             )
             Button(
-                onClick = {},
+                onClick = {
+                    var salt = hash.generateSalt()
+                    VM.postMovieGoer(
+                        MovieGoer(
+                            username = userNameInput,
+                            bio = "",
+                            full_name = "",
+                            password_hash = hash.hashPasswordPBKDF2(
+                                password = userPwInput,
+                                salt = salt
+                            ),
+                            salt = hash.saltToBase64(salt),
+                            avatar_url = ""
+                        )
+                    )
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFE9A6A6),
                     contentColor = Color.White,

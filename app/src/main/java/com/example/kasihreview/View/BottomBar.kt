@@ -42,8 +42,8 @@ fun bottomBar(navController: NavController){
     val botBarItems = listOf(
         BottomNavBar(
             "Home",
-            ImageVector.vectorResource(R.drawable.home),
-            ImageVector.vectorResource(R.drawable.home),
+            ImageVector.vectorResource(R.drawable.home__1_),
+            ImageVector.vectorResource(R.drawable.home__1_),
             false
         ),
         BottomNavBar(

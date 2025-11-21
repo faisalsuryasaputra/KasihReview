@@ -11,6 +11,7 @@ import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.Model.MovieSearchResult
 import com.example.kasihreview.Model.genre
+import com.example.kasihreview.Network.KasihReviewClient
 import com.example.kasihreview.Network.TMDBclient
 import com.example.kasihreview.Network.httpClient
 import com.example.kasihreview.Security.Hash
@@ -25,50 +26,8 @@ class KRviewModel: ViewModel() {
     val tmdbClient = TMDBclient(httpClient(CIO.create()))
     val hash = Hash()
 
+    val kasihReviewClient = KasihReviewClient(httpClient(CIO.create()))
 
-    fun createDummyMovieGoers(): List<MovieGoer> {
-        // NOTE: untuk demo ini saya pakai password contoh; ganti sesuai kebutuhan
-        val plainPasswords = listOf("leonHELP", "MySecret123!", "marvelR0x")
-
-        val user1Salt = hash.generateSalt()
-        val user1Hash = hash.hashPasswordPBKDF2(plainPasswords[0], user1Salt)
-
-        val user2Salt = hash.generateSalt()
-        val user2Hash = hash.hashPasswordPBKDF2(plainPasswords[1], user2Salt)
-
-        val user3Salt = hash.generateSalt()
-        val user3Hash = hash.hashPasswordPBKDF2(plainPasswords[2], user3Salt)
-
-        return listOf(
-            MovieGoer(
-                user_id = 1,
-                username = "ashleyGraham",
-                bio = "Penggemar film sci-fi dan thriller. Pecinta popcorn sejati 🍿",
-                full_name = "Ella Freya",
-                password_hash = user1Hash,
-                salt = hash.saltToBase64(user1Salt),
-                avatar_url = "https://example.com/avatars/alya.png"
-            ),
-            MovieGoer(
-                user_id = 2,
-                username = "movieman99",
-                bio = "Suka nonton film klasik dan dokumenter. Film noir adalah favorit!",
-                full_name = "Rizky Andhika Pratama",
-                password_hash = user2Hash,
-                salt = hash.saltToBase64(user2Salt),
-                avatar_url = "https://example.com/avatars/rizky.jpg"
-            ),
-            MovieGoer(
-                user_id = 3,
-                username = "marvelgeek",
-                bio = "Marvel Cinematic Universe fanboy. Bisa debat urutan timeline MCU!",
-                full_name = "Dimas Fadhil Setiawan",
-                password_hash = user3Hash,
-                salt = hash.saltToBase64(user3Salt),
-                avatar_url = "https://example.com/avatars/dimas.webp"
-            )
-        )
-    }
 
     private val _moviesSearch = MutableStateFlow(MovieSearchResult())
     val moviesSearch = _moviesSearch.asStateFlow()
@@ -93,6 +52,13 @@ class KRviewModel: ViewModel() {
             it.replace(genreDetails.id.toString() +"%7C","")
         }
     }
+
+    fun postMovieGoer(movieGoer: MovieGoer) {
+        viewModelScope.launch {
+            kasihReviewClient.postMovieGoer(movieGoer)
+        }
+    }
+
     fun getPopularMovies(){
         viewModelScope.launch {
             tmdbClient.getPopularMovies()
@@ -144,13 +110,13 @@ class KRviewModel: ViewModel() {
         }
     }
 
-    fun loginAuthentication(username: String, password: String): Boolean{
-        val dummy = createDummyMovieGoers()
-        for (user in dummy) {
-            if (username == user.username) {
-                return hash.verifyPassword(password, user.password_hash, hash.base64ToSalt(user.salt))
-            }
-        }
-        return false
-    }
+//    fun loginAuthentication(username: String, password: String): Boolean{
+//        val dummy = createDummyMovieGoers()
+//        for (user in dummy) {
+//            if (username == user.username) {
+//                return hash.verifyPassword(password, user.password_hash, hash.base64ToSalt(user.salt))
+//            }
+//        }
+//        return false
+//    }
 }

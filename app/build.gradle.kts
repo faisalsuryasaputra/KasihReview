@@ -89,4 +89,11 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("androidx.compose.material3:material3:1.3.2")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    // Converter untuk JSON (pakai Gson)
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+//    // OKHttp Client (optional tapi disarankan)
+//    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }

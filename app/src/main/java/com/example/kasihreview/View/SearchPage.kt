@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -101,6 +102,12 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                 onValueChange = { change ->
                     input = change
                 },
+                textStyle = TextStyle(
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.50f)
+                ),
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
                 placeholder = {
