@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -12,6 +13,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,14 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.kasihreview.Model.ReviewResponse
 import com.example.kasihreview.R
+import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
 
-var review = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In congue semper pharetra. Pellentesque euismod justo eget rhoncus fringilla. Phasellus pharetra magna id ante accumsan rutrum. Nunc pretium ex nibh, nec faucibus leo ornare nec. Proin accumsan mi mi, eget ornare felis accumsan maximus. Duis nec pharetra risus. Nam euismod nisi eget justo efficitur interdum. Nulla cursus ornare condimentum. Aliquam porta dolor sit amet aliquam euismod. Aliquam sodales, augue nec lobortis eleifend, mi libero blandit neque,"
-
-
 @Composable
-fun ulasanPrev(){
+fun ulasanPrev(username: String, ulasan: ReviewResponse){
+    var ulasanPendek: String = ulasan.content
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
@@ -38,7 +41,9 @@ fun ulasanPrev(){
 
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             Image(painter = painterResource(R.drawable.ella), contentDescription = "bidadari cantik"
                 , modifier = Modifier
@@ -57,20 +62,20 @@ fun ulasanPrev(){
                 .width(5.dp))
 
             Text(
-                text = "Ella",
+                text = username,
                 fontFamily = OpenSans,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFFE9A6A6)
             )
         }
 
-        if (review.length > 159) {
+        if (ulasan.content.length > 159) {
 
-            review = "${review.substring(0,159)}..."
+            ulasanPendek = "${ulasan.content.substring(0,159)}..."
         }
 
         Text(
-            text = review,
+            text = ulasanPendek,
             fontFamily = OpenSans,
             fontWeight = FontWeight.Normal,
             color = Color.White

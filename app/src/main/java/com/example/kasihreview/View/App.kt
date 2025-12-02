@@ -13,8 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.MovieDetails
 import com.example.kasihreview.NavObjects.UlasanPage
+import com.example.kasihreview.NavObjects.WatchListPage
 import com.example.kasihreview.NavObjects.daftarPage
 import com.example.kasihreview.NavObjects.loginPage
+import com.example.kasihreview.NavObjects.profilePage
 import com.example.kasihreview.NavObjects.searchPage
 import com.example.kasihreview.ViewModel.KRviewModel
 
@@ -63,6 +65,12 @@ fun app(){
             }
             composable<UlasanPage>{
                 ulasanPage(navController, VM)
+            }
+            composable<profilePage>{
+                profilePage(navController, VM)
+            }
+            composable<WatchListPage>{
+                watchListPage(navController, VM)
             }
         }
     }

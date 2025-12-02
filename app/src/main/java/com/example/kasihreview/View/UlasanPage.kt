@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -52,11 +53,15 @@ fun ulasanPage(navController: NavController, VM: KRviewModel){
 
     val scrollState = rememberScrollState()
 
+    var isSpoiler by remember { mutableStateOf(false) }
+
     var ulasan by remember {
         mutableStateOf("")
     }
 
     val movie by VM.movieDetailsState.collectAsState()
+
+    val currentSession by VM.currentSession.collectAsState()
 
     var star1 by remember {
         mutableIntStateOf(R.drawable.blank_star)
@@ -250,6 +255,20 @@ fun ulasanPage(navController: NavController, VM: KRviewModel){
                     )
 
                 }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = isSpoiler,
+                        onCheckedChange = { isSpoiler = it }
+                    )
+                    Text(
+                        text = "Mengandung Spoiler",
+                        fontFamily = OpenSans,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 9.sp,
+                        color = Color.White
+                    )
+                }
             }
 
             AsyncImage(
@@ -297,7 +316,7 @@ fun ulasanPage(navController: NavController, VM: KRviewModel){
             },
             modifier = Modifier
                 .verticalScroll(scrollState)
-                .height(450.dp)
+                .height(400.dp)
                 .fillMaxWidth()
         )
 
@@ -309,7 +328,17 @@ fun ulasanPage(navController: NavController, VM: KRviewModel){
 
         Button(
             onClick = {
-
+                movie.movie_Id?.let {
+                    currentSession.id?.let { it1 ->
+                        VM.postReview(
+                            movieId = it,
+                            userId = it1,
+                            content = ulasan,
+                            rating = rating,
+                            isSpoiler = isSpoiler
+                        )
+                    }
+                }
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFE9A6A6),

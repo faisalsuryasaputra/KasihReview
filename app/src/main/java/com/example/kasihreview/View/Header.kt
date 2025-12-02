@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -31,6 +32,7 @@ fun header(){
             .fillMaxWidth()
             .height(50.dp)
             .background(color = Color(0xFF1F1D36))
+            .padding(bottom = 5.dp)
             .statusBarsPadding()
     ) {
 

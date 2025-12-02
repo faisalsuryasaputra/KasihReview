@@ -34,6 +34,7 @@ import com.example.kasihreview.ui.theme.OpenSans
 @Composable
 fun homePage(navController: NavController, viewModel: KRviewModel){
     val popularMoviesState by viewModel.popularMoviesUIState.collectAsState()
+    val currentSession by viewModel.currentSession.collectAsState()
     viewModel.getPopularMovies()
 
     Column(
@@ -51,14 +52,16 @@ fun homePage(navController: NavController, viewModel: KRviewModel){
                 color = Color.White,
                 modifier = Modifier
             )
-            Text(
-                text = "Ella Freya",
-                fontFamily = OpenSans,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color(0xFFE9A6A6),
-                modifier = Modifier
-            )
+            currentSession.username?.let {
+                Text(
+                    text = it,
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color(0xFFE9A6A6),
+                    modifier = Modifier
+                )
+            }
         }
         Text(
             text = "Tinjau atau lacak film yang sudah kamu tonton...",

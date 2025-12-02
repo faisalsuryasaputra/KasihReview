@@ -288,11 +288,7 @@ fun daftarPage(navController: NavController, VM: KRviewModel){
                             username = userNameInput,
                             bio = "",
                             full_name = "",
-                            password_hash = hash.hashPasswordPBKDF2(
-                                password = userPwInput,
-                                salt = salt
-                            ),
-                            salt = hash.saltToBase64(salt),
+                            password_hash = userPwInput,
                             avatar_url = ""
                         )
                     )

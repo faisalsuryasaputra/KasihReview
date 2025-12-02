@@ -23,6 +23,14 @@ data class Movies(
 )
 
 @Serializable
+data class MovieForPost(
+    var movieId: Int,
+    var title: String,
+    var description: String,
+    var posterUrl: String,
+)
+
+@Serializable
 data class MovieDetails(
     @SerialName("id")
     var movie_Id: Int? = 0,

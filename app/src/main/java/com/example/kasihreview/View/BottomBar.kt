@@ -23,6 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.kasihreview.NavObjects.HomePage
+import com.example.kasihreview.NavObjects.profilePage
 import com.example.kasihreview.NavObjects.searchPage
 import com.example.kasihreview.R
 
@@ -72,6 +73,8 @@ fun bottomBar(navController: NavController){
                         navController.navigate(HomePage)
                     }else if (selectedIndex == 1) {
                         navController.navigate(searchPage)
+                    }else if (selectedIndex == 2) {
+                        navController.navigate(profilePage)
                     }
                 },
                 label = {

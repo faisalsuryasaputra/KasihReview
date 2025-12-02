@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -39,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.kasihreview.Model.MovieDetails
+import com.example.kasihreview.Model.MovieSearchResult
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.R
 import com.example.kasihreview.ViewModel.KRviewModel
@@ -75,7 +79,23 @@ val genreList: List<GenreDetails> = listOf(
 @Composable
 fun searchPage(navController: NavController, VM: KRviewModel){
     val result by VM.moviesSearch.collectAsState()
+
     val genres by VM.accumulatedGenre.collectAsState()
+
+    var radioLabels = listOf<String>("Name", "Year", "Rating")
+
+    var sortedResult by remember {
+        mutableStateOf(MovieSearchResult(results = result.results))
+    }
+
+    var seleceted by remember {
+        mutableStateOf(radioLabels[0])
+    }
+
+    var selecetedForOrder by remember {
+        mutableStateOf("")
+    }
+
     var genreToggle by remember {
         mutableStateOf(false)
     }
@@ -205,6 +225,103 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                     }
                 }
                 genreButton(genreList[3],VM)
+
+                Spacer(
+                    modifier = Modifier
+                        .height(20.dp)
+                )
+
+                Text(
+                    text = "Sort By",
+                    fontFamily = OpenSans,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
+                )
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    radioLabels.forEach { radio ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable { seleceted = radio }
+                        ) {
+                            RadioButton(
+                                selected = seleceted == radio,
+                                onClick = {
+                                    seleceted = radio
+                                }
+                            )
+
+                            Text(
+                                text = radio,
+                                fontFamily = OpenSans,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = "IN",
+                        fontFamily = OpenSans,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White,
+                        modifier = Modifier
+                            .padding(start = 15.dp)
+                    )
+
+                    Row {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable { selecetedForOrder = "Asc" }
+                        ) {
+                            RadioButton(
+                                selected = selecetedForOrder == "Asc",
+                                onClick = {
+                                    selecetedForOrder = "Asc"
+                                    if (seleceted == "Name") {
+                                        VM.sortByNameAscend()
+                                    }else if (seleceted == "Year") {
+                                        VM.sortByYearAscend()
+                                    }
+                                }
+                            )
+
+                            Text(
+                                text = "Ascending",
+                                fontFamily = OpenSans,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable { selecetedForOrder = "Desc" }
+                        ) {
+                            RadioButton(
+                                selected = selecetedForOrder == "Desc",
+                                onClick = {
+                                    selecetedForOrder = "Desc"
+                                    if (seleceted == "Name") {
+                                        VM.sortByNameDescend()
+                                    }else if (seleceted == "Year") {
+                                        VM.sortByYearDescend()
+                                    }
+                                }
+                            )
+
+                            Text(
+                                text = "Descending",
+                                fontFamily = OpenSans,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -264,43 +381,47 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     movieRow.forEach { movie ->
-                        Column(
-                            //verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.Start,
-                            modifier = Modifier
-                                .width(180.dp)
-                                .clickable {
-                                    movie.movie_Id?.let { VM.getMovieDetailsById(it) }
-                                    navController.navigate(com.example.kasihreview.NavObjects.MovieDetails)
+                        if (movie.poster_Url != null) {
+                            Column(
+                                //verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .width(180.dp)
+                                    .clickable {
+                                        movie.movie_Id?.let { VM.getMovieDetailsById(it) }
+                                        navController.navigate(com.example.kasihreview.NavObjects.MovieDetails)
+                                    }
+                            ) {
+
+                                AsyncImage(
+                                    model = "https://image.tmdb.org/t/p/w500"+movie.poster_Url,
+                                    contentDescription = movie.title,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(5.dp))
+                                )
+                                movie.title?.let {
+                                    Text(
+                                        text = it,
+                                        fontFamily = OpenSans,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF8F8E9A)
+                                    )
                                 }
-                        ) {
-                            AsyncImage(
-                                model = "https://image.tmdb.org/t/p/w500"+movie.poster_Url,
-                                contentDescription = movie.title,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(5.dp))
-                            )
-                            movie.title?.let {
-                                Text(
-                                    text = it,
-                                    fontFamily = OpenSans,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF8F8E9A)
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(5.dp)
                                 )
-                            }
-                            Spacer(
-                                modifier = Modifier
-                                    .height(5.dp)
-                            )
-                            movie.releaseYear?.let {
-                                Text(
-                                    text = it,
-                                    fontFamily = OpenSans,
-                                    fontWeight = FontWeight.Normal,
-                                    color = Color(0xFF8F8E9A)
-                                )
+                                movie.releaseYear?.let {
+                                    Text(
+                                        text = it,
+                                        fontFamily = OpenSans,
+                                        fontWeight = FontWeight.Normal,
+                                        color = Color(0xFF8F8E9A)
+                                    )
+                                }
                             }
                         }
+
                     }
 
 

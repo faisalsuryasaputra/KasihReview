@@ -6,11 +6,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.animesearch.Util.NetworkError
+import com.example.animesearch.Util.onError
 import com.example.animesearch.Util.onSuccess
+import com.example.kasihreview.Model.AllMovieGoer
+import com.example.kasihreview.Model.BackendError
 import com.example.kasihreview.Model.MovieDetails
+import com.example.kasihreview.Model.MovieForPost
 import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.Model.MovieSearchResult
+import com.example.kasihreview.Model.ReviewResponse
+import com.example.kasihreview.Model.WatchlistDTO
 import com.example.kasihreview.Model.genre
+import com.example.kasihreview.Model.listOfReviewResponse
 import com.example.kasihreview.Network.KasihReviewClient
 import com.example.kasihreview.Network.TMDBclient
 import com.example.kasihreview.Network.httpClient
@@ -26,8 +35,24 @@ class KRviewModel: ViewModel() {
     val tmdbClient = TMDBclient(httpClient(CIO.create()))
     val hash = Hash()
 
+    var isInList by mutableStateOf(false)
+        private set
+
     val kasihReviewClient = KasihReviewClient(httpClient(CIO.create()))
 
+    val erroMessage = MutableStateFlow("")
+
+    private val _currentSession = MutableStateFlow(MovieGoer())
+    val currentSession = _currentSession.asStateFlow()
+
+    private val _accountWatchList = MutableStateFlow(WatchlistDTO())
+    val accountWatchList = _accountWatchList.asStateFlow()
+
+    private val _accountReviews = MutableStateFlow(listOfReviewResponse())
+    val accountReviews = _accountReviews.asStateFlow()
+
+    private val _movieReviews = MutableStateFlow(listOfReviewResponse())
+    val movieReviews = _movieReviews.asStateFlow()
 
     private val _moviesSearch = MutableStateFlow(MovieSearchResult())
     val moviesSearch = _moviesSearch.asStateFlow()
@@ -43,19 +68,127 @@ class KRviewModel: ViewModel() {
 
     fun addGenre(genreDetails: GenreDetails){
         _accumulatedGenre.update {
-            it + genreDetails.id.toString() +"%7C"
+            it + genreDetails.id.toString() +"%2C"
         }
     }
 
     fun removeGenre(genreDetails: GenreDetails){
         _accumulatedGenre.update {
-            it.replace(genreDetails.id.toString() +"%7C","")
+            it.replace(genreDetails.id.toString() +"%2C","")
+        }
+    }
+
+     fun postMovie(movieForPost: MovieForPost){
+        viewModelScope.launch {
+            kasihReviewClient.postMovie(movieForPost)
+                .onSuccess {
+                    println(it)
+                }
+        }
+
+    }
+
+    fun sortByYearAscend() {
+        _moviesSearch.update { result ->
+            result.copy(results = result.results.sortedBy { it.releaseYear })
+        }
+    }
+
+    fun sortByYearDescend() {
+        _moviesSearch.update { result ->
+            result.copy(results = result.results.sortedByDescending { it.releaseYear })
+        }
+    }
+
+    fun sortByNameAscend() {
+        _moviesSearch.update { result ->
+            result.copy(results = result.results.sortedBy { it.title })
+        }
+    }
+
+    fun sortByNameDescend() {
+        _moviesSearch.update { result ->
+            result.copy(results = result.results.sortedByDescending { it.title })
+        }
+    }
+
+    fun postReview(
+        movieId: Int,
+        userId: Int,
+        content: String,
+        rating: Int,
+        isSpoiler: Boolean
+    ){
+        viewModelScope.launch {
+            kasihReviewClient.postReview(
+                movieId = movieId,
+                userId = userId,
+                content = content,
+                rating = rating,
+                isSpoiler = isSpoiler
+            )
+        }
+    }
+
+    fun getReviewByMovieGoerId(id: Int){
+        viewModelScope.launch {
+            kasihReviewClient.getReviewByMovieGoerId(id)
+                .onSuccess {apiCallResult ->
+                    _accountReviews.update { uiState ->
+                        uiState.copy(allReviews = apiCallResult)
+                    }
+                }
+        }
+    }
+
+    fun getReviewByMovieId(id: Int){
+        viewModelScope.launch {
+            kasihReviewClient.getReviewByMovieId(id)
+                .onSuccess {apiCallResult ->
+                    _movieReviews.update { uiState ->
+                        uiState.copy(allReviews = apiCallResult)
+                    }
+                }
         }
     }
 
     fun postMovieGoer(movieGoer: MovieGoer) {
         viewModelScope.launch {
             kasihReviewClient.postMovieGoer(movieGoer)
+        }
+    }
+
+    fun postMovieToWatchList(userId: Int, movieId: Int) {
+        viewModelScope.launch {
+            kasihReviewClient.postMovieToWatchList(userId, movieId)
+                .onSuccess {
+                    println(it)
+                }
+        }
+    }
+
+    fun deleteMovieFromWatchList(userId: Int, movieId: Int) {
+        viewModelScope.launch {
+            kasihReviewClient.deleteMovieFromWatchList(userId, movieId)
+                .onSuccess {
+                    println(it)
+                }
+        }
+    }
+
+    fun getWatchListByUserId(userId: Int) {
+        viewModelScope.launch {
+            kasihReviewClient.getWatchListByUserId(userId)
+                .onSuccess {apiCallResult ->
+                    _accountWatchList.update { uiState ->
+                        uiState.copy(
+                            watchlistId = apiCallResult.watchlistId,
+                            userId = apiCallResult.userId,
+                            username = apiCallResult.username,
+                            movies = apiCallResult.movies
+                        )
+                    }
+                }
         }
     }
 
@@ -110,13 +243,25 @@ class KRviewModel: ViewModel() {
         }
     }
 
-//    fun loginAuthentication(username: String, password: String): Boolean{
-//        val dummy = createDummyMovieGoers()
-//        for (user in dummy) {
-//            if (username == user.username) {
-//                return hash.verifyPassword(password, user.password_hash, hash.base64ToSalt(user.salt))
-//            }
-//        }
-//        return false
-//    }
+    fun loginAuthentication(username: String, password: String) {
+        viewModelScope.launch {
+            kasihReviewClient.loginAuth(username, password)
+                .onSuccess { apiCallResult ->
+                    _currentSession.update { uiState ->
+                        uiState.copy(
+                            id = apiCallResult.user.id,
+                            username = apiCallResult.user.username,
+                            bio = apiCallResult.user.bio,
+                            avatar_url = apiCallResult.user.avatar_url
+                        )
+                    }
+                }
+                .onError { error ->
+                    when(error) {
+                        is BackendError -> println("Server says: ${error.message}")
+                        is NetworkError -> println("Network error: $error")
+                    }
+                }
+        }
+    }
 }
