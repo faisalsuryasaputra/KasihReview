@@ -208,6 +208,29 @@ class KasihReviewClient(val client: HttpClient) {
         }
     }
 
+    suspend fun getReviewById(id: Int): Result<ReviewResponse, NetworkError> {
+        val response = try {
+            client.get("http://10.0.2.2:8080/api/reviews/$id")
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<ReviewResponse>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
     suspend fun getReviewByMovieId(id: Int): Result<List<ReviewResponse>, NetworkError> {
         val response = try {
             client.get("http://10.0.2.2:8080/api/movies/$id/reviews")

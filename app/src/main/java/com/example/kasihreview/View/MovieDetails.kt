@@ -3,6 +3,7 @@ package com.example.kasihreview.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,6 +41,7 @@ import coil.compose.AsyncImage
 import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.Movies
 import com.example.kasihreview.NavObjects.HomePage
+import com.example.kasihreview.NavObjects.UlasanDetail
 import com.example.kasihreview.NavObjects.UlasanPage
 import com.example.kasihreview.R
 import com.example.kasihreview.ViewModel.KRviewModel
@@ -401,9 +403,15 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
         ) {
             items(reviews.allReviews) {
                 if (!spoiler && !it.isSpoiler) {
-                    ulasanPrev(it.reviewerName, it)
+                    ulasanPrev(it.reviewerName, it, Modifier.clickable {
+                        viewModel.getReviewById(it.reviewId)
+                        navController.navigate(UlasanDetail)
+                    })
                 }else if (spoiler && it.isSpoiler) {
-                    ulasanPrev(it.reviewerName, it)
+                    ulasanPrev(it.reviewerName, it, Modifier.clickable {
+                        viewModel.getReviewById(it.reviewId)
+                        navController.navigate(UlasanDetail)
+                    })
                 }
             }
         }

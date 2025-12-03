@@ -22,16 +22,16 @@ data class ReviewRequestDTO(
 
 @Serializable
 data class ReviewResponse(
-    @SerialName("reviewId") val reviewId: Int,
-    @SerialName("reviewerName") val reviewerName: String,
-    @SerialName("movieId") val movieId: Int,
-    @SerialName("movieTitle") val movieTitle: String?,
-    @SerialName("content") val content: String,
-    @SerialName("rating") val rating: Int,
-    @SerialName("spoiler") val isSpoiler: Boolean,
-    @SerialName("createdAt") val createdAt: String,
-    @SerialName("upvotes") val upvotes: Int,
-    @SerialName("downvotes") val downvotes: Int
+    @SerialName("reviewId") val reviewId: Int = -1,
+    @SerialName("reviewerName") val reviewerName: String = "",
+    @SerialName("movieId") val movieId: Int = -1,
+    @SerialName("movieTitle") val movieTitle: String? = "",
+    @SerialName("content") val content: String = "",
+    @SerialName("rating") val rating: Int = -1,
+    @SerialName("spoiler") val isSpoiler: Boolean = false,
+    @SerialName("createdAt") val createdAt: String = "",
+    @SerialName("upvotes") val upvotes: Int = -1,
+    @SerialName("downvotes") val downvotes: Int = -1
 )
 
 @Serializable

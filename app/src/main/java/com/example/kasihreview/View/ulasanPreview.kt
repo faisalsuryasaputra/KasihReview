@@ -30,7 +30,11 @@ import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
 
 @Composable
-fun ulasanPrev(username: String, ulasan: ReviewResponse){
+fun ulasanPrev(
+    username: String,
+    ulasan: ReviewResponse,
+    modifier: Modifier
+){
     var ulasanPendek: String = ulasan.content
     Column(
         modifier = Modifier
@@ -87,7 +91,7 @@ fun ulasanPrev(username: String, ulasan: ReviewResponse){
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
             color = Color(0xFF9C4A8B),
-            modifier = Modifier
+            modifier = modifier
         )
     }
 }

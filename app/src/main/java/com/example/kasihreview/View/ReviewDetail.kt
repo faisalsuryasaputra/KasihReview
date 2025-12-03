@@ -45,6 +45,8 @@ import com.example.kasihreview.ui.theme.OpenSans
 fun reviewDetail(navController: NavController, viewModel: KRviewModel){
     var rating = 4.5
     val movie by viewModel.movieDetailsState.collectAsState()
+    val ulasanDetail by viewModel.ulasanDetail.collectAsState()
+    viewModel.getMovieDetailsById(ulasanDetail.movieId)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -206,7 +208,7 @@ fun reviewDetail(navController: NavController, viewModel: KRviewModel){
         )
 
         Text(
-            text = "Ulasan Anda",
+            text = "Ulasan",
             fontFamily = OpenSans,
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
@@ -218,6 +220,21 @@ fun reviewDetail(navController: NavController, viewModel: KRviewModel){
             modifier = Modifier
                 .height(10.dp)
         )
+
+        Column(
+            modifier = Modifier
+                .background(Color(0xFF3D3B54))
+        ) {
+            Text(
+                text = ulasanDetail.content,
+                fontFamily = OpenSans,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                color = Color.White,
+                modifier = Modifier
+            )
+
+        }
 
 
     }

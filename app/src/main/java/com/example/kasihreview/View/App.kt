@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.MovieDetails
+import com.example.kasihreview.NavObjects.UlasanDetail
 import com.example.kasihreview.NavObjects.UlasanPage
 import com.example.kasihreview.NavObjects.WatchListPage
 import com.example.kasihreview.NavObjects.daftarPage
@@ -71,6 +72,9 @@ fun app(){
             }
             composable<WatchListPage>{
                 watchListPage(navController, VM)
+            }
+            composable<UlasanDetail>{
+                reviewDetail(navController, VM)
             }
         }
     }

@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.kasihreview.NavObjects.UlasanDetail
 import com.example.kasihreview.NavObjects.WatchListPage
 import com.example.kasihreview.R
 import com.example.kasihreview.ViewModel.KRviewModel
@@ -244,7 +245,10 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
 
             /** ULASAN LIST */
             items(accountReviews.allReviews) { review ->
-                account.username?.let { ulasanPrev(it, review) }
+                account.username?.let { ulasanPrev(it, review, Modifier.clickable {
+                    VM.getReviewById(review.reviewId)
+                    navController.navigate(UlasanDetail)
+                }) }
                 Spacer(Modifier.height(10.dp))
             }
         }

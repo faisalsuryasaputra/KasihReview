@@ -40,7 +40,8 @@ class KRviewModel: ViewModel() {
 
     val kasihReviewClient = KasihReviewClient(httpClient(CIO.create()))
 
-    val erroMessage = MutableStateFlow("")
+    private val _ulasanDetail = MutableStateFlow(ReviewResponse())
+    val ulasanDetail = _ulasanDetail.asStateFlow()
 
     private val _currentSession = MutableStateFlow(MovieGoer())
     val currentSession = _currentSession.asStateFlow()
@@ -136,6 +137,28 @@ class KRviewModel: ViewModel() {
                 .onSuccess {apiCallResult ->
                     _accountReviews.update { uiState ->
                         uiState.copy(allReviews = apiCallResult)
+                    }
+                }
+        }
+    }
+
+    fun getReviewById(id: Int){
+        viewModelScope.launch {
+            kasihReviewClient.getReviewById(id)
+                .onSuccess {apiCallResult ->
+                    _ulasanDetail.update { uiState ->
+                        uiState.copy(
+                            reviewId = apiCallResult.reviewId,
+                            reviewerName = apiCallResult.reviewerName,
+                            movieId = apiCallResult.movieId,
+                            movieTitle = apiCallResult.movieTitle,
+                            content = apiCallResult.content,
+                            rating = apiCallResult.rating,
+                            isSpoiler = apiCallResult.isSpoiler,
+                            createdAt = apiCallResult.createdAt,
+                            upvotes = apiCallResult.upvotes,
+                            downvotes = apiCallResult.downvotes
+                        )
                     }
                 }
         }
