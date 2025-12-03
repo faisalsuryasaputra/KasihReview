@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.kasihreview.NavObjects.EditProfilePage
 import com.example.kasihreview.NavObjects.UlasanDetail
 import com.example.kasihreview.NavObjects.WatchListPage
 import com.example.kasihreview.R
@@ -56,6 +57,7 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
     account.id?.let { VM.getReviewByMovieGoerId(it) }
     val accountReviews by VM.accountReviews.collectAsState()
 
+    account.id?.let { VM.getMovieGoerById(it) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -128,15 +130,17 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
 
             /** BIO */
             item {
-                Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed viverra, odio id posuere cursus, ipsum neque gravida tellus.",
-                    fontFamily = OpenSans,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 8.sp,
-                    color = Color.White,
-                    lineHeight = 12.sp,
-                    modifier = Modifier.width(150.dp)
-                )
+                account.bio?.let {
+                    Text(
+                        text = it,
+                        fontFamily = OpenSans,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 8.sp,
+                        color = Color.White,
+                        lineHeight = 12.sp,
+                        modifier = Modifier.width(150.dp)
+                    )
+                }
 
                 Spacer(Modifier.height(15.dp))
             }
@@ -162,7 +166,9 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
             /** BUTTON */
             item {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        navController.navigate(EditProfilePage)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFE9A6A6),
                         contentColor = Color(0xFF1F1D36),

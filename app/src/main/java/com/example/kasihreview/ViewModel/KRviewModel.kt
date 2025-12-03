@@ -10,7 +10,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.animesearch.Util.NetworkError
 import com.example.animesearch.Util.onError
 import com.example.animesearch.Util.onSuccess
-import com.example.kasihreview.Model.AllMovieGoer
 import com.example.kasihreview.Model.BackendError
 import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.MovieForPost
@@ -142,6 +141,22 @@ class KRviewModel: ViewModel() {
         }
     }
 
+    fun getMovieGoerById(id: Int){
+        viewModelScope.launch {
+            kasihReviewClient.getMovieGoerById(id)
+                .onSuccess {apiCallResult ->
+                    _currentSession.update { uiState ->
+                        uiState.copy(
+                            id = apiCallResult.id,
+                            username = apiCallResult.username,
+                            bio = apiCallResult.bio,
+                            avatar_url = apiCallResult.profilePicture
+                        )
+                    }
+                }
+        }
+    }
+
     fun getReviewById(id: Int){
         viewModelScope.launch {
             kasihReviewClient.getReviewById(id)
@@ -184,6 +199,15 @@ class KRviewModel: ViewModel() {
     fun postMovieToWatchList(userId: Int, movieId: Int) {
         viewModelScope.launch {
             kasihReviewClient.postMovieToWatchList(userId, movieId)
+                .onSuccess {
+                    println(it)
+                }
+        }
+    }
+
+    fun updateUserProfile(user: MovieGoer) {
+        viewModelScope.launch {
+            kasihReviewClient.updateUserProfile(user)
                 .onSuccess {
                     println(it)
                 }

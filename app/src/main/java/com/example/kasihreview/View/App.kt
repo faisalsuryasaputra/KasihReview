@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.kasihreview.NavObjects.EditProfilePage
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.MovieDetails
 import com.example.kasihreview.NavObjects.UlasanDetail
@@ -75,6 +76,9 @@ fun app(){
             }
             composable<UlasanDetail>{
                 reviewDetail(navController, VM)
+            }
+            composable<EditProfilePage>{
+                editProfilePage(navController, VM)
             }
         }
     }

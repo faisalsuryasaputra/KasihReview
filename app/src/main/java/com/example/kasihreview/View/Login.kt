@@ -250,6 +250,7 @@ fun loginPage(navController: NavController, viewModel: KRviewModel){
                     viewModel.loginAuthentication(userNameInput, userPwInput)
                     if (account.id != -1) {
                         navController.navigate(HomePage)
+                        println(account.bio)
                         loginError = ""
                     }else {
                         loginError = "Username atau password salah"

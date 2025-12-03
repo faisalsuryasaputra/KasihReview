@@ -2,8 +2,6 @@ package com.example.kasihreview.Model
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class AllMovieGoer(val data: List<MovieGoer> = emptyList())
 
 @Serializable
 data class MovieGoer(
@@ -14,4 +12,13 @@ data class MovieGoer(
     val password_hash: String? = null,
     val salt: String? = null,
     val avatar_url: String? = null
+)
+
+@Serializable
+data class MovieGoerDTO(
+    val id: Int,
+    val username: String,
+    val email: String?,
+    val profilePicture: String?,
+    val bio: String?
 )
