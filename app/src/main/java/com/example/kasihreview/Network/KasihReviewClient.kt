@@ -329,6 +329,96 @@ class KasihReviewClient(val client: HttpClient) {
         }
     }
 
+    suspend fun updateUserReviewContent(userId: Int, content: String): Result<ReviewRequestDTO, NetworkError> {
+        val response = try {
+            client.patch("http://10.0.2.2:8080/api/reviews/${userId}") {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    mapOf(
+                        "content" to content
+                    )
+                )
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<ReviewRequestDTO>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun updateUserReviewRating(userId: Int, rating: Int): Result<ReviewRequestDTO, NetworkError> {
+        val response = try {
+            client.patch("http://10.0.2.2:8080/api/reviews/${userId}") {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    mapOf(
+                        "rating" to rating
+                    )
+                )
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<ReviewRequestDTO>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun updateUserReviewSpoiler(userId: Int, isSpoiler: Boolean): Result<ReviewRequestDTO, NetworkError> {
+        val response = try {
+            client.patch("http://10.0.2.2:8080/api/reviews/${userId}") {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    mapOf(
+                        "isSpoiler" to isSpoiler
+                    )
+                )
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<ReviewRequestDTO>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
     suspend fun deleteMovieFromWatchList(userId: Int, movieId: Int): Result<WatchlistDTO, NetworkError> {
         val response = try {
             client.delete("http://10.0.2.2:8080/api/watchlist/user/$userId/movie/$movieId") {

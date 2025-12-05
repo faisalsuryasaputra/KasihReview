@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,11 +32,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.kasihreview.NavObjects.profilePage
 import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
+import kotlinx.coroutines.launch
 
 @Composable
 fun editProfilePage(navController: NavController, VM: KRviewModel){
+
+    val scope = rememberCoroutineScope()
 
     val scrollState = rememberScrollState()
 
@@ -96,7 +101,12 @@ fun editProfilePage(navController: NavController, VM: KRviewModel){
         ) {
             Button(
                 onClick = {
-                    VM.updateUserProfile(account.copy(bio = bio))
+                    scope.launch {
+                        VM.updateUserProfile(account.copy(bio = bio))
+                        account.id?.let { VM.getMovieGoerById(it) }
+                        navController.navigate(profilePage)
+                    }
+
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFE9A6A6),

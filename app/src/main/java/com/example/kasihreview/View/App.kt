@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.kasihreview.NavObjects.EditProfilePage
+import com.example.kasihreview.NavObjects.EditUlasanPage
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.MovieDetails
 import com.example.kasihreview.NavObjects.UlasanDetail
@@ -79,6 +80,9 @@ fun app(){
             }
             composable<EditProfilePage>{
                 editProfilePage(navController, VM)
+            }
+            composable<EditUlasanPage>{
+                editUlasanPage(navController, VM)
             }
         }
     }

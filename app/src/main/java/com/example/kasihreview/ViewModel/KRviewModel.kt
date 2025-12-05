@@ -15,6 +15,7 @@ import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.MovieForPost
 import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.Model.MovieSearchResult
+import com.example.kasihreview.Model.ReviewRequestDTO
 import com.example.kasihreview.Model.ReviewResponse
 import com.example.kasihreview.Model.WatchlistDTO
 import com.example.kasihreview.Model.genre
@@ -208,6 +209,25 @@ class KRviewModel: ViewModel() {
     fun updateUserProfile(user: MovieGoer) {
         viewModelScope.launch {
             kasihReviewClient.updateUserProfile(user)
+                .onSuccess {
+                    println(it)
+                }
+        }
+    }
+
+    fun updateUserReview(userId: Int, update: ReviewRequestDTO) {
+        viewModelScope.launch {
+            kasihReviewClient.updateUserReviewContent(userId, update.content)
+                .onSuccess {
+                    println(it)
+                }
+
+            kasihReviewClient.updateUserReviewRating(userId, update.rating)
+                .onSuccess {
+                    println(it)
+                }
+
+            kasihReviewClient.updateUserReviewSpoiler(userId, update.isSpoiler)
                 .onSuccess {
                     println(it)
                 }

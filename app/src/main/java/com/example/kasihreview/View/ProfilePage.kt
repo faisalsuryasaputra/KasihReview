@@ -26,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.kasihreview.NavObjects.EditProfilePage
+import com.example.kasihreview.NavObjects.EditUlasanPage
 import com.example.kasihreview.NavObjects.UlasanDetail
 import com.example.kasihreview.NavObjects.WatchListPage
 import com.example.kasihreview.R
@@ -54,10 +56,14 @@ import com.example.kasihreview.ui.theme.OpenSans
 fun profilePage(navController: NavController,VM: KRviewModel) {
 
     val account by VM.currentSession.collectAsState()
-    account.id?.let { VM.getReviewByMovieGoerId(it) }
+
     val accountReviews by VM.accountReviews.collectAsState()
 
-    account.id?.let { VM.getMovieGoerById(it) }
+    LaunchedEffect(Unit) {
+        account.id?.let { VM.getReviewByMovieGoerId(it) }
+        account.id?.let { VM.getMovieGoerById(it) }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -253,7 +259,12 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
             items(accountReviews.allReviews) { review ->
                 account.username?.let { ulasanPrev(it, review, Modifier.clickable {
                     VM.getReviewById(review.reviewId)
-                    navController.navigate(UlasanDetail)
+                    VM.getMovieDetailsById(review.movieId)
+                    if (review.reviewerName == account.username) {
+                        navController.navigate(EditUlasanPage)
+                    }else {
+                        navController.navigate(UlasanDetail)
+                    }
                 }) }
                 Spacer(Modifier.height(10.dp))
             }

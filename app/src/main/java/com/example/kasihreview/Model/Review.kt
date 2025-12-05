@@ -13,11 +13,11 @@ data class Review(
 
 @Serializable
 data class ReviewRequestDTO(
-    val movieId: Int,
-    val userId: Int,
-    val content: String,
-    val rating: Int,
-    val isSpoiler: Boolean
+    val movieId: Int = -1,
+    val userId: Int = -1,
+    val content: String = "",
+    val rating: Int = 0,
+    val isSpoiler: Boolean = false
 )
 
 @Serializable
