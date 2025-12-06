@@ -15,6 +15,7 @@ import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.MovieForPost
 import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.Model.MovieSearchResult
+import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.Model.ReviewRequestDTO
 import com.example.kasihreview.Model.ReviewResponse
 import com.example.kasihreview.Model.WatchlistDTO
@@ -79,11 +80,14 @@ class KRviewModel: ViewModel() {
         }
     }
 
-     fun postMovie(movieForPost: MovieForPost){
+     fun postMovie(movieForPost: MoviesDTO){
         viewModelScope.launch {
             kasihReviewClient.postMovie(movieForPost)
                 .onSuccess {
-                    println(it)
+                    println("sukses")
+                }
+                .onError {
+                    print("gagal")
                 }
         }
 

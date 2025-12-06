@@ -11,6 +11,7 @@ import com.example.kasihreview.Model.MovieForPost
 import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.Model.MovieGoerDTO
 import com.example.kasihreview.Model.MovieSearchResult
+import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.Model.Review
 import com.example.kasihreview.Model.ReviewRequestDTO
 import com.example.kasihreview.Model.ReviewResponse
@@ -78,7 +79,7 @@ class KasihReviewClient(val client: HttpClient) {
 
     }
 
-    suspend fun postMovie(movie: MovieForPost): Result<MovieForPost, NetworkError> {
+    suspend fun postMovie(movie: MoviesDTO): Result<MoviesDTO, NetworkError> {
 
         val response = try {
             client.post("http://10.0.2.2:8080/api/movies") {
@@ -93,7 +94,7 @@ class KasihReviewClient(val client: HttpClient) {
 
         return when(response.status.value) {
             in 200..299 -> {
-                val result = response.body<MovieForPost>()
+                val result = response.body<MoviesDTO>()
                 Result.Success(result)
             }
             401 -> Result.Error(NetworkError.UNAUTHORIZED)

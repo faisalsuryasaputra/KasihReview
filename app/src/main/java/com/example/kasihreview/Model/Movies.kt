@@ -24,10 +24,24 @@ data class Movies(
 
 @Serializable
 data class MovieForPost(
-    var movieId: Int,
-    var title: String,
-    var description: String,
-    var posterUrl: String,
+    val movieId: Int,
+    val title: String = "Placeholder",
+    val releaseYear: Int = 2000,
+    val genre: List<String> = emptyList(),
+    val description: String = "Description",
+    val posterUrl: String = "Poster",
+    val avgRating: Float = 0f
+)
+
+@Serializable
+data class MoviesDTO(
+    val movieId: Int,
+    val title: String,
+    val genre: List<String>,
+    val releaseYear: Int,
+    val description: String,
+    val rating: Double,
+    val posterUrl: String
 )
 
 @Serializable

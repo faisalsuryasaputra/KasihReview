@@ -1,5 +1,8 @@
 package com.example.kasihreview.View
 
+import android.graphics.Movie
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,11 +45,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.kasihreview.Model.MovieDetails
+import com.example.kasihreview.Model.MovieForPost
 import com.example.kasihreview.Model.MovieSearchResult
+import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.R
 import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
+import java.time.LocalDate
 
 data class GenreDetails(
     var id: Int,
@@ -76,6 +82,7 @@ val genreList: List<GenreDetails> = listOf(
 )
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun searchPage(navController: NavController, VM: KRviewModel){
     val result by VM.moviesSearch.collectAsState()
@@ -389,6 +396,14 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                                     .width(180.dp)
                                     .clickable {
                                         movie.movie_Id?.let { VM.getMovieDetailsById(it) }
+                                        movie.movie_Id?.let {
+                                            movie.title?.let { it1 ->
+                                                MoviesDTO(
+                                                    it, it1, emptyList(),LocalDate.parse(movie.releaseYear).year,"Kosong",0.0,
+                                                    movie.poster_Url!!
+                                                )
+                                            }
+                                        }?.let { VM.postMovie(movieForPost = it) }
                                         navController.navigate(com.example.kasihreview.NavObjects.MovieDetails)
                                     }
                             ) {

@@ -22,10 +22,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +48,7 @@ import com.example.kasihreview.NavObjects.UlasanPage
 import com.example.kasihreview.R
 import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
+import kotlinx.coroutines.launch
 
 @Composable
 fun movieDetails(navController: NavController, viewModel: KRviewModel){
@@ -65,9 +68,25 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
 
     account.id?.let { viewModel.getReviewByMovieGoerId(it) }
 
-    account.id?.let { viewModel.getWatchListByUserId(it) }
+
 
     val accountWatchList by viewModel.accountWatchList.collectAsState()
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        account.id?.let { viewModel.getWatchListByUserId(it) }
+        for (i in accountWatchList.movies) {
+            if (i.movieId == movie.movie_Id) {
+                inList = "Hapus Dari List"
+                break
+            }else {
+                inList = "Tambah Ke List"
+            }
+        }
+    }
+
+
 
     Column(
         modifier = Modifier
@@ -133,23 +152,23 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                         if (inList == "Hapus Dari List") {
                             inList = "Tambah Ke List"
                             println(inList)
-                            account.id?.let { movie.movie_Id?.let { it1 ->
-                                viewModel.deleteMovieFromWatchList(it,
-                                    it1
-                                )
-                            } }
-
-
+                            scope.launch {
+                                account.id?.let { movie.movie_Id?.let { it1 ->
+                                    viewModel.deleteMovieFromWatchList(it,
+                                        it1
+                                    )
+                                } }
+                            }
                         }else if (inList == "Tambah Ke List") {
                             inList = "Hapus Dari List"
                             println(inList)
-                            account.id?.let { accountId ->
-                                movie.movie_Id?.let { movieId ->
-                                    viewModel.postMovieToWatchList(accountId, movieId)
+                            scope.launch {
+                                account.id?.let { accountId ->
+                                    movie.movie_Id?.let { movieId ->
+                                        viewModel.postMovieToWatchList(accountId, movieId)
+                                    }
                                 }
                             }
-
-
                         }
 
                     },
@@ -168,14 +187,7 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                         contentDescription = "",
                     )
 
-                    for (i in accountWatchList.movies) {
-                        if (i.movieId == movie.movie_Id) {
-                            inList = "Hapus Dari List"
-                            break
-                        }else {
-                            inList = "Tambah Ke List"
-                        }
-                    }
+
 
                     Text(
                         text = inList,
