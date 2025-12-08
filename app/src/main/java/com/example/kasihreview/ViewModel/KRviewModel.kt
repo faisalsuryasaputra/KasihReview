@@ -1,30 +1,25 @@
 package com.example.kasihreview.ViewModel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.animesearch.Util.NetworkError
 import com.example.animesearch.Util.onError
 import com.example.animesearch.Util.onSuccess
 import com.example.kasihreview.Model.BackendError
 import com.example.kasihreview.Model.MovieDetails
-import com.example.kasihreview.Model.MovieForPost
 import com.example.kasihreview.Model.MovieGoer
 import com.example.kasihreview.Model.MovieSearchResult
 import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.Model.ReviewRequestDTO
 import com.example.kasihreview.Model.ReviewResponse
+import com.example.kasihreview.Model.VoteDTO
+import com.example.kasihreview.Model.VoteList
+import com.example.kasihreview.Model.VoteRequestDTO
 import com.example.kasihreview.Model.WatchlistDTO
-import com.example.kasihreview.Model.genre
 import com.example.kasihreview.Model.listOfReviewResponse
 import com.example.kasihreview.Network.KasihReviewClient
 import com.example.kasihreview.Network.TMDBclient
 import com.example.kasihreview.Network.httpClient
-import com.example.kasihreview.Security.Hash
 import com.example.kasihreview.View.GenreDetails
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,10 +29,9 @@ import kotlinx.coroutines.launch
 
 class KRviewModel: ViewModel() {
     val tmdbClient = TMDBclient(httpClient(CIO.create()))
-    val hash = Hash()
 
-    var isInList by mutableStateOf(false)
-        private set
+    private val _userVoteList = MutableStateFlow(VoteList())
+    val userVoteList = _userVoteList.asStateFlow()
 
     val kasihReviewClient = KasihReviewClient(httpClient(CIO.create()))
 
@@ -88,6 +82,58 @@ class KRviewModel: ViewModel() {
                 }
                 .onError {
                     print("gagal")
+                }
+        }
+
+    }
+
+    fun postReviewVote(reviewVote: VoteRequestDTO, reviewId: Int){
+        viewModelScope.launch {
+            kasihReviewClient.postReviewVote(reviewVote, reviewId)
+                .onSuccess {
+                    println("sukses")
+                }
+                .onError {
+                    print("gagal")
+                }
+        }
+
+    }
+
+    fun deleteReviewVote(reviewVote: VoteRequestDTO, reviewId: Int, voteId: Int){
+        viewModelScope.launch {
+            _currentSession.value.id?.let {
+                kasihReviewClient.deleteReviewVote(reviewId, voteId)
+                    .onSuccess {
+                        println("sukses")
+                    }
+                    .onError {
+                        print("gagal")
+                    }
+            }
+        }
+
+    }
+
+    fun getVotesByMovieGoerId(movieId: Int, movieGoerId: Int){
+        viewModelScope.launch {
+            _currentSession.value.id?.let {
+                kasihReviewClient.getVoteByMovieGoerId(movieId, movieGoerId)
+                    .onSuccess {apiCallResult ->
+                        _userVoteList.update { uiState ->
+                            uiState.copy(voteList = apiCallResult)
+                        }
+                    }
+            }
+        }
+
+    }
+
+    fun patchUserVote(voteId: Int, reviewId: Int, voteType: String){
+        viewModelScope.launch {
+            kasihReviewClient.patchUserVote(voteId, reviewId, voteType)
+                .onSuccess {
+                    println("sukses")
                 }
         }
 

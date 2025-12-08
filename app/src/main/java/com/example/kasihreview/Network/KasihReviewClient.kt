@@ -15,6 +15,8 @@ import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.Model.Review
 import com.example.kasihreview.Model.ReviewRequestDTO
 import com.example.kasihreview.Model.ReviewResponse
+import com.example.kasihreview.Model.VoteDTO
+import com.example.kasihreview.Model.VoteRequestDTO
 import com.example.kasihreview.Model.WatchlistDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -293,6 +295,137 @@ class KasihReviewClient(val client: HttpClient) {
         return when(response.status.value) {
             in 200..299 -> {
                 val result = response.body<WatchlistDTO>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun postReviewVote(reviewVote: VoteRequestDTO, reviewId: Int): Result<String, NetworkError> {
+        val response = try {
+            client.post("http://10.0.2.2:8080/api/reviews/$reviewId/vote") {
+                contentType(ContentType.Application.Json)
+                setBody(reviewVote)
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<String>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun getVoteByReviewId(reviewId: Int): Result<List<VoteDTO>, NetworkError> {
+        val response = try {
+            client.get("http://10.0.2.2:8080/api/reviews/$reviewId/votes") {
+                contentType(ContentType.Application.Json)
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<List<VoteDTO>>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun getVoteByMovieGoerId(movieId: Int, movieGoerId: Int): Result<List<VoteDTO>, NetworkError> {
+        val response = try {
+            client.get("http://10.0.2.2:8080/api/movies/$movieId/votes/moviegoer/$movieGoerId") {
+                contentType(ContentType.Application.Json)
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<List<VoteDTO>>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun patchUserVote(voteId: Int, reviewId: Int, voteType: String): Result<String, NetworkError> {
+        val response = try {
+            client.patch("http://10.0.2.2:8080/api/reviews/$reviewId/vote/$voteId") {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    mapOf(
+                        "voteType" to voteType
+                    )
+                )
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<String>()
+                Result.Success(result)
+            }
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    suspend fun deleteReviewVote(reviewId: Int, voteId: Int): Result<String, NetworkError> {
+        val response = try {
+            client.post("http://10.0.2.2:8080/api/reviews/$reviewId/vote/$voteId") {
+                contentType(ContentType.Application.Json)
+            }
+        }catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+
+        return when(response.status.value) {
+            in 200..299 -> {
+                val result = response.body<String>()
                 Result.Success(result)
             }
             401 -> Result.Error(NetworkError.UNAUTHORIZED)

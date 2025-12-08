@@ -257,15 +257,19 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
 
             /** ULASAN LIST */
             items(accountReviews.allReviews) { review ->
-                account.username?.let { ulasanPrev(it, review, Modifier.clickable {
-                    VM.getReviewById(review.reviewId)
-                    VM.getMovieDetailsById(review.movieId)
-                    if (review.reviewerName == account.username) {
-                        navController.navigate(EditUlasanPage)
-                    }else {
-                        navController.navigate(UlasanDetail)
-                    }
-                }) }
+                ulasanPrev(
+                    review,
+                    Modifier.clickable {
+                        VM.getReviewById(review.reviewId)
+                        VM.getMovieDetailsById(review.movieId)
+                        if (review.reviewerName == account.username) {
+                            navController.navigate(EditUlasanPage)
+                        }else {
+                            navController.navigate(UlasanDetail)
+                        }
+                    },
+                    VM
+                )
                 Spacer(Modifier.height(10.dp))
             }
         }

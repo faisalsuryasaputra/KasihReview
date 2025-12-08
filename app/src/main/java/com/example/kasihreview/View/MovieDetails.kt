@@ -42,6 +42,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.kasihreview.Model.MovieDetails
 import com.example.kasihreview.Model.Movies
+import com.example.kasihreview.NavObjects.EditUlasanPage
 import com.example.kasihreview.NavObjects.HomePage
 import com.example.kasihreview.NavObjects.UlasanDetail
 import com.example.kasihreview.NavObjects.UlasanPage
@@ -413,17 +414,35 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(reviews.allReviews) {
-                if (!spoiler && !it.isSpoiler) {
-                    ulasanPrev(it.reviewerName, it, Modifier.clickable {
-                        viewModel.getReviewById(it.reviewId)
-                        navController.navigate(UlasanDetail)
-                    })
-                }else if (spoiler && it.isSpoiler) {
-                    ulasanPrev(it.reviewerName, it, Modifier.clickable {
-                        viewModel.getReviewById(it.reviewId)
-                        navController.navigate(UlasanDetail)
-                    })
+            items(reviews.allReviews) {review ->
+                if (!spoiler && !review.isSpoiler) {
+                    ulasanPrev(
+                        review,
+                        Modifier.clickable {
+                            viewModel.getReviewById(review.reviewId)
+                            viewModel.getMovieDetailsById(review.movieId)
+                            if (review.reviewerName == account.username) {
+                                navController.navigate(EditUlasanPage)
+                            }else {
+                                navController.navigate(UlasanDetail)
+                            }
+                        },
+                        viewModel
+                    )
+                }else if (spoiler && review.isSpoiler) {
+                    ulasanPrev(
+                        review,
+                        Modifier.clickable {
+                            viewModel.getReviewById(review.reviewId)
+                            viewModel.getMovieDetailsById(review.movieId)
+                            if (review.reviewerName == account.username) {
+                                navController.navigate(EditUlasanPage)
+                            }else {
+                                navController.navigate(UlasanDetail)
+                            }
+                        },
+                        viewModel
+                    )
                 }
             }
         }
