@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun movieDetails(navController: NavController, viewModel: KRviewModel){
-    var rating = 4.5
 
     val movie by viewModel.movieDetailsState.collectAsState()
 
@@ -68,6 +67,17 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
     var inList by remember { mutableStateOf("Tambah Ke List") }
 
     account.id?.let { viewModel.getReviewByMovieGoerId(it) }
+
+    val avgRating by viewModel.movieAvgRating.collectAsState()
+
+    LaunchedEffect(movie.movie_Id) {
+        println(movie.movie_Id)
+        movie.movie_Id?.let { viewModel.getMovieAvgRating(it) }
+    }
+
+    LaunchedEffect(avgRating) {
+
+    }
 
 
 
@@ -203,7 +213,7 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "4.4",
+                        text = avgRating.toString(),
                         fontFamily = OpenSans,
                         fontWeight = FontWeight.Normal,
                         color = Color(0xFFE9A6A6)
@@ -212,7 +222,7 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(1.dp)
                     ) {
-                        when (rating) {
+                        when (avgRating) {
                             0.5 -> Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
                             1.0 -> Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                             1.5 -> {

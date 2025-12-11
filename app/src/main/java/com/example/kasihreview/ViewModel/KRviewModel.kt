@@ -59,6 +59,9 @@ class KRviewModel: ViewModel() {
     private val _movieDetailsState = MutableStateFlow(MovieDetails())
     val movieDetailsState = _movieDetailsState.asStateFlow()
 
+    private val _movieAvgRating = MutableStateFlow(0.0)
+    val movieAvgRating = _movieAvgRating.asStateFlow()
+
     private val _accumulatedGenre = MutableStateFlow("")
     val accumulatedGenre = _accumulatedGenre.asStateFlow()
 
@@ -187,6 +190,17 @@ class KRviewModel: ViewModel() {
                 .onSuccess {apiCallResult ->
                     _accountReviews.update { uiState ->
                         uiState.copy(allReviews = apiCallResult)
+                    }
+                }
+        }
+    }
+
+    fun getMovieAvgRating(id: Int){
+        viewModelScope.launch {
+            kasihReviewClient.getMovieById(id)
+                .onSuccess {apiCallResult ->
+                    _movieAvgRating.update {
+                        apiCallResult
                     }
                 }
         }
