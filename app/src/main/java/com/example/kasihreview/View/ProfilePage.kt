@@ -59,9 +59,12 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
 
     val accountReviews by VM.accountReviews.collectAsState()
 
+    val accountWatchList by VM.accountWatchList.collectAsState()
+
     LaunchedEffect(Unit) {
         account.id?.let { VM.getReviewByMovieGoerId(it) }
         account.id?.let { VM.getMovieGoerById(it) }
+        account.id?.let { VM.getWatchListByUserId(it) }
     }
 
     Box(
@@ -156,12 +159,12 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
                 Row(horizontalArrangement = Arrangement.spacedBy(30.dp)) {
 
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("4", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE9A6A6))
+                        Text(accountWatchList.movies.size.toString(), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFFE9A6A6))
                         Text("Saved", fontSize = 12.sp, color = Color.White)
                     }
 
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("30", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF9C4A8B))
+                        Text(accountReviews.allReviews.size.toString(), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF9C4A8B))
                         Text("Ulasan", fontSize = 12.sp, color = Color.White)
                     }
                 }

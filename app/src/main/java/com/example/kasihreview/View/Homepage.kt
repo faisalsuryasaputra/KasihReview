@@ -1,5 +1,7 @@
 package com.example.kasihreview.View
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,10 +29,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.NavObjects.MovieDetails
 import com.example.kasihreview.ViewModel.KRviewModel
 import com.example.kasihreview.ui.theme.OpenSans
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun homePage(navController: NavController, viewModel: KRviewModel){
     val popularMoviesState by viewModel.popularMoviesUIState.collectAsState()
@@ -94,6 +99,14 @@ fun homePage(navController: NavController, viewModel: KRviewModel){
                             .clip(RoundedCornerShape(5.dp))
                             .clickable {
                                 movie.movie_Id?.let { viewModel.getMovieDetailsById(it) }
+                                movie.movie_Id?.let {
+                                    movie.title?.let { it1 ->
+                                        MoviesDTO(
+                                            it, it1, emptyList(), LocalDate.parse(movie.releaseYear).year,"Kosong",0.0,
+                                            movie.poster_Url!!
+                                        )
+                                    }
+                                }?.let { viewModel.postMovie(movieForPost = it) }
                                 navController.navigate(MovieDetails)
                             }
                     )

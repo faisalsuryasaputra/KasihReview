@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,6 +61,8 @@ fun ulasanPrev(
     LaunchedEffect(review.downvotes) {
         account.id?.let { VM.getReviewByMovieGoerId(it) }
     }
+
+    val voteUser = userVotes.voteList.find { it.reviewId == review.reviewId }
 
     var ulasanPendek: String = review.content
     Column(
@@ -126,6 +129,15 @@ fun ulasanPrev(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            if (voteUser != null) {
+                if (voteUser.voteType == "upvote") {
+                    upvote = R.drawable.upvotefilled
+                    downvote =R.drawable.downvoteunfilled
+                }else if (voteUser.voteType == "downvote") {
+                    downvote = R.drawable.downvotefilled
+                    upvote = R.drawable.upvoteunfilled
+                }
+            }
             Image(
                 imageVector = ImageVector.vectorResource(upvote),
                 contentDescription = "",

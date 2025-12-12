@@ -282,7 +282,6 @@ fun daftarPage(navController: NavController, VM: KRviewModel){
             )
             Button(
                 onClick = {
-                    var salt = hash.generateSalt()
                     VM.postMovieGoer(
                         MovieGoer(
                             username = userNameInput,

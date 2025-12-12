@@ -339,6 +339,7 @@ fun ulasanPage(navController: NavController, VM: KRviewModel){
                         )
                     }
                 }
+                navController.navigate(MovieDetails)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFE9A6A6),
