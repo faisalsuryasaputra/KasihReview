@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.kasihreview.Model.MovieGoer
+import com.example.kasihreview.NavObjects.HomePage
+import com.example.kasihreview.NavObjects.daftarPage
 import com.example.kasihreview.NavObjects.loginPage
 import com.example.kasihreview.R
 import com.example.kasihreview.Security.Hash
@@ -56,6 +60,13 @@ fun daftarPage(navController: NavController, VM: KRviewModel){
 
     var userEmailInput by remember {
         mutableStateOf("")
+    }
+
+    val serverError by VM.serverErrorMessage.collectAsState()
+
+    LaunchedEffect(serverError) {
+        if (serverError == "Sukses Daftar")
+            navController.navigate(loginPage)
     }
 
     Box(
@@ -310,6 +321,16 @@ fun daftarPage(navController: NavController, VM: KRviewModel){
                     color = Color(0xFF1F1D36),
                 )
             }
+
+            Text(
+                text = serverError,
+                fontFamily = OpenSans,
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                color = Color.Red,
+                modifier = Modifier
+            )
+
             Spacer(
                 modifier = Modifier
                     .height(20.dp)

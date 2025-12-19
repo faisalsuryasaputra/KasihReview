@@ -70,6 +70,14 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
 
     val avgRating by viewModel.movieAvgRating.collectAsState()
 
+    val accountReviews by viewModel.accountReviews.collectAsState()
+
+    var hasReviewed: Boolean = false
+    LaunchedEffect(movie.movie_Id) {
+        account.id?.let { viewModel.getReviewByMovieGoerId(it) }
+        hasReviewed = accountReviews.allReviews.any { it.movieId == movie.movie_Id }
+    }
+
     LaunchedEffect(movie.movie_Id) {
         println(movie.movie_Id)
         movie.movie_Id?.let { viewModel.getMovieAvgRating(it) }
@@ -133,7 +141,14 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
 
                 Button(
                     onClick = {
-                        navController.navigate(UlasanPage)
+                        val review = accountReviews.allReviews.find { it.movieId == movie.movie_Id }
+                        if (review != null) {
+                            viewModel.getReviewById(review.reviewId)
+                            navController.navigate(EditUlasanPage)
+                        } else {
+                            navController.navigate(UlasanPage)
+                        }
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFE9A6A6),
@@ -150,12 +165,22 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                         contentDescription = "",
                     )
 
-                    Text(
-                        text = "Nilai atau Ulas",
-                        fontFamily = OpenSans,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
-                    )
+                    if (!hasReviewed) {
+                        Text(
+                            text = "Nilai atau Ulas",
+                            fontFamily = OpenSans,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black
+                        )
+                    }else {
+                        Text(
+                            text = "Edit Ulasan",
+                            fontFamily = OpenSans,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black
+                        )
+                    }
+
                 }
 
                 Button(

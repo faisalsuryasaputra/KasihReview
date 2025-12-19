@@ -22,7 +22,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.animesearch.Util.onSuccess
 import com.example.kasihreview.Model.Movies
 import com.example.kasihreview.Network.TMDBclient
-import com.example.kasihreview.Network.httpClient
 import com.example.kasihreview.View.app
 import com.example.kasihreview.View.testingSearch
 import com.example.kasihreview.ViewModel.KRviewModel

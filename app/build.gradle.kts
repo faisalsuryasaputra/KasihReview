@@ -94,6 +94,10 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     // Converter untuk JSON (pakai Gson)
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+    implementation(platform("io.ktor:ktor-bom:$ktor_version")) // sesuaikan versi Ktor yang kamu pakai
+
 //    // OKHttp Client (optional tapi disarankan)
 //    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }

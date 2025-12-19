@@ -12,14 +12,13 @@ import com.example.kasihreview.Model.MovieSearchResult
 import com.example.kasihreview.Model.MoviesDTO
 import com.example.kasihreview.Model.ReviewRequestDTO
 import com.example.kasihreview.Model.ReviewResponse
-import com.example.kasihreview.Model.VoteDTO
 import com.example.kasihreview.Model.VoteList
 import com.example.kasihreview.Model.VoteRequestDTO
 import com.example.kasihreview.Model.WatchlistDTO
 import com.example.kasihreview.Model.listOfReviewResponse
 import com.example.kasihreview.Network.KasihReviewClient
 import com.example.kasihreview.Network.TMDBclient
-import com.example.kasihreview.Network.httpClient
+import com.example.kasihreview.Network.provideHttpClient
 import com.example.kasihreview.View.GenreDetails
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,18 +27,22 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class KRviewModel: ViewModel() {
-    val tmdbClient = TMDBclient(httpClient(CIO.create()))
+    val httpClient = provideHttpClient()
+
+    val tmdbClient = TMDBclient(httpClient)
+    val kasihReviewClient = KasihReviewClient(httpClient)
 
     private val _userVoteList = MutableStateFlow(VoteList())
     val userVoteList = _userVoteList.asStateFlow()
-
-    val kasihReviewClient = KasihReviewClient(httpClient(CIO.create()))
 
     private val _ulasanDetail = MutableStateFlow(ReviewResponse())
     val ulasanDetail = _ulasanDetail.asStateFlow()
 
     private val _currentSession = MutableStateFlow(MovieGoer())
     val currentSession = _currentSession.asStateFlow()
+
+    private val _serverErrorMessage = MutableStateFlow(" ")
+    val serverErrorMessage = _serverErrorMessage.asStateFlow()
 
     private val _accountWatchList = MutableStateFlow(WatchlistDTO())
     val accountWatchList = _accountWatchList.asStateFlow()
@@ -258,6 +261,19 @@ class KRviewModel: ViewModel() {
     fun postMovieGoer(movieGoer: MovieGoer) {
         viewModelScope.launch {
             kasihReviewClient.postMovieGoer(movieGoer)
+                .onSuccess {
+                    _serverErrorMessage.update {
+                        "Sukses Daftar"
+                    }
+                }
+                .onError { error ->
+                    when(error) {
+                        is BackendError -> _serverErrorMessage.update {
+                            error.message
+                        }
+                        is NetworkError -> println("Network error: $error")
+                    }
+                }
         }
     }
 
@@ -386,10 +402,16 @@ class KRviewModel: ViewModel() {
                             avatar_url = apiCallResult.user.avatar_url
                         )
                     }
+                    _serverErrorMessage.update {
+                        ""
+                    }
+
                 }
                 .onError { error ->
                     when(error) {
-                        is BackendError -> println("Server says: ${error.message}")
+                        is BackendError -> _serverErrorMessage.update {
+                            error.message
+                        }
                         is NetworkError -> println("Network error: $error")
                     }
                 }

@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +60,13 @@ fun loginPage(navController: NavController, viewModel: KRviewModel){
     }
 
     val account by viewModel.currentSession.collectAsState()
+
+    val serverError by viewModel.serverErrorMessage.collectAsState()
+
+    LaunchedEffect(serverError) {
+        if (serverError == "")
+        navController.navigate(HomePage)
+    }
 
     Box(
         modifier = Modifier
@@ -248,14 +256,6 @@ fun loginPage(navController: NavController, viewModel: KRviewModel){
             Button(
                 onClick = {
                     viewModel.loginAuthentication(userNameInput, userPwInput)
-                    if (account.id != -1) {
-                        navController.navigate(HomePage)
-                        println(account.bio)
-                        loginError = ""
-                    }else {
-                        loginError = "Username atau password salah"
-                    }
-
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFE9A6A6),
@@ -277,7 +277,7 @@ fun loginPage(navController: NavController, viewModel: KRviewModel){
             }
 
             Text(
-                text = loginError,
+                text = serverError,
                 fontFamily = OpenSans,
                 fontWeight = FontWeight.Bold,
                 fontSize = 12.sp,
