@@ -97,14 +97,7 @@ fun ulasanPage(navController: NavController, VM: KRviewModel){
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.back),
-                contentDescription = "",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate(MovieDetails)
-                    }
-            )
+
             Text(
                 text = "Tulis Ulasan Anda",
                 fontFamily = OpenSans,

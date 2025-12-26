@@ -149,25 +149,25 @@ class KRviewModel: ViewModel() {
         _moviesSearch.update { result ->
             result.copy(results = result.results.sortedBy { it.releaseYear })
         }
-    }
+        println("bisa")    }
 
     fun sortByYearDescend() {
         _moviesSearch.update { result ->
             result.copy(results = result.results.sortedByDescending { it.releaseYear })
         }
-    }
+        println("bisa")    }
 
     fun sortByNameAscend() {
         _moviesSearch.update { result ->
             result.copy(results = result.results.sortedBy { it.title })
         }
-    }
+        println("bisa")    }
 
     fun sortByNameDescend() {
         _moviesSearch.update { result ->
             result.copy(results = result.results.sortedByDescending { it.title })
         }
-    }
+        println("bisa")    }
 
     fun postReview(
         movieId: Int,

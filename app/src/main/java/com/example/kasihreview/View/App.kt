@@ -34,11 +34,6 @@ fun app(){
         daftarPage::class.qualifiedName
     )
     Scaffold(
-        topBar = {
-            if (currentRoute !in noHeaderRoutes) {
-                header()
-            }
-        },
         bottomBar = {
             if (currentRoute !in noHeaderRoutes) {
                 bottomBar(navController)

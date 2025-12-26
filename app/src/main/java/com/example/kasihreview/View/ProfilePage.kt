@@ -35,11 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -117,7 +120,7 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
             /** PROFILE PICTURE + USERNAME */
             item {
                 Image(
-                    painter = painterResource(R.drawable.ella),
+                    imageVector = ImageVector.vectorResource(R.drawable.genericavatar),
                     contentDescription = "pp",
                     modifier = Modifier
                         .size(78.dp)
@@ -201,32 +204,21 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
                         .clickable {
                             navController.navigate(WatchListPage)
                         }
+                        .drawBehind {
+                            val strokeWidth = 1.dp.toPx()   // ketebalan garis
+                            val yOffset = size.height + 2.dp.toPx() // jarak garis dari teks
+
+                            drawLine(
+                                color = Color.White,
+                                start = Offset(0f, yOffset),
+                                end = Offset(size.width, yOffset),
+                                strokeWidth = strokeWidth
+                            )
+                        }
                 )
 
-                Spacer(Modifier.height(20.dp))
-            }
 
-            /** HORIZONTAL LIST */
-            item {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.width(300.dp)) {
-                    items(10) {
-                        Image(
-                            painter = painterResource(R.drawable.fightclub),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .height(100.dp)
-                                .clip(RoundedCornerShape(5.dp))
-                        )
-                    }
-                }
 
-                Spacer(Modifier.height(20.dp))
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color.White.copy(0.19f))
-                )
                 Spacer(Modifier.height(20.dp))
             }
 
@@ -234,7 +226,9 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(240.dp)
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ){
                     Text(
                         text = "Terakhir Diriview",
@@ -244,16 +238,6 @@ fun profilePage(navController: NavController,VM: KRviewModel) {
                         color = Color.White,
                         modifier = Modifier
                     )
-
-                    Text(
-                        text = "Lihat Semua",
-                        fontFamily = OpenSans,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 9.sp,
-                        color = Color(0xFFE9A6A6),
-                        modifier = Modifier
-                    )
-
                 }
                     Spacer(Modifier.height(10.dp))
             }

@@ -89,7 +89,7 @@ fun searchPage(navController: NavController, VM: KRviewModel){
 
     val genres by VM.accumulatedGenre.collectAsState()
 
-    var radioLabels = listOf<String>("Name", "Year", "Rating")
+    var radioLabels = listOf<String>("Name", "Year")
 
     var sortedResult by remember {
         mutableStateOf(MovieSearchResult(results = result.results))
@@ -187,7 +187,8 @@ fun searchPage(navController: NavController, VM: KRviewModel){
         if (genreToggle == true) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
             ) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -252,7 +253,7 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                     radioLabels.forEach { radio ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { seleceted = radio }
+                            //modifier = Modifier.clickable { seleceted = radio }
                         ) {
                             RadioButton(
                                 selected = seleceted == radio,
@@ -282,12 +283,14 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                     Row {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { selecetedForOrder = "Asc" }
+                            //modifier = Modifier.clickable { selecetedForOrder = "Asc" }
                         ) {
                             RadioButton(
                                 selected = selecetedForOrder == "Asc",
                                 onClick = {
                                     selecetedForOrder = "Asc"
+                                    println(seleceted)
+                                    println(selecetedForOrder)
                                     if (seleceted == "Name") {
                                         VM.sortByNameAscend()
                                     }else if (seleceted == "Year") {
@@ -306,12 +309,14 @@ fun searchPage(navController: NavController, VM: KRviewModel){
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { selecetedForOrder = "Desc" }
+                            //modifier = Modifier.clickable { selecetedForOrder = "Desc" }
                         ) {
                             RadioButton(
                                 selected = selecetedForOrder == "Desc",
                                 onClick = {
                                     selecetedForOrder = "Desc"
+                                    println(seleceted)
+                                    println(selecetedForOrder)
                                     if (seleceted == "Name") {
                                         VM.sortByNameDescend()
                                     }else if (seleceted == "Year") {
@@ -325,6 +330,34 @@ fun searchPage(navController: NavController, VM: KRviewModel){
                                 fontFamily = OpenSans,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color.White
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier
+                                .width(20.dp)
+                        )
+
+                        Button(
+                            onClick = {
+                                VM.getMoviesByGenres(genres)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFE9A6A6),
+                                contentColor = Color.White,
+                                disabledContainerColor = Color.White,
+                                disabledContentColor = Color.White
+                            ),
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(35.dp)
+                        ) {
+                            Text(
+                                text = "Search",
+                                fontFamily = OpenSans,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = Color(0xFF1F1D36),
                             )
                         }
                     }
@@ -343,12 +376,7 @@ fun searchPage(navController: NavController, VM: KRviewModel){
         ) {
             Button(
                 onClick = {
-                    if (genreToggle == false) {
-                        VM.getMoviesByName(input)
-                    }else {
-                        VM.getMoviesByGenres(genres)
-                    }
-
+                    VM.getMoviesByName(input)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFE9A6A6),

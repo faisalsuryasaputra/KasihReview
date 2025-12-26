@@ -69,7 +69,6 @@ fun ulasanPrev(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .background(Color(0xFFE9A6A6).copy(0.05f))
-            .height(180.dp)
             .padding(5.dp)
 
     ) {
@@ -78,11 +77,11 @@ fun ulasanPrev(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Image(painter = painterResource(R.drawable.ella), contentDescription = "bidadari cantik"
+            Image(imageVector = ImageVector.vectorResource(R.drawable.genericavatar), contentDescription = " "
                 , modifier = Modifier
-                    .height(50.dp)
-                    .width(50.dp)
-                    .clip(CircleShape))
+//                    .height(50.dp)
+//                    .width(50.dp)
+                    )
 
             Text(
                 text = "Ulasan dari",
@@ -102,9 +101,9 @@ fun ulasanPrev(
             )
         }
 
-        if (review.content.length > 159) {
+        if (review.content.length > 80) {
 
-            ulasanPendek = "${review.content.substring(0,159)}..."
+            ulasanPendek = "${review.content.substring(0,80)}..."
         }
 
         Text(
@@ -113,6 +112,15 @@ fun ulasanPrev(
             fontWeight = FontWeight.Normal,
             color = Color.White
         )
+
+        review.movieTitle?.let {
+            Text(
+                text = it,
+                fontFamily = OpenSans,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFFE9A6A6)
+            )
+        }
 
         Text(
             text = "Baca Selengkapnya >",
