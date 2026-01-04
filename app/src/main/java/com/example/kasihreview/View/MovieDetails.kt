@@ -238,7 +238,7 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = avgRating.toString(),
+                        text = String.format("%.1f", avgRating),
                         fontFamily = OpenSans,
                         fontWeight = FontWeight.Normal,
                         color = Color(0xFFE9A6A6)
@@ -248,40 +248,40 @@ fun movieDetails(navController: NavController, viewModel: KRviewModel){
                         horizontalArrangement = Arrangement.spacedBy(1.dp)
                     ) {
                         when (avgRating) {
-                            0.5 -> Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
-                            1.0 -> Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
-                            1.5 -> {
+                            in 0.0..0.9 -> Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
+                            in 1.0..1.4 -> Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
+                            in 1.5..1.9 -> {
                                 Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
                             }
-                            2.0 -> {
+                            in 2.0..2.4 -> {
                                 for (i in 1..2) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                             }
-                            2.5 -> {
+                            in 2.5..2.9 -> {
                                 for (i in 1..2) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                                 Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
                             }
-                            3.0 -> {
+                            in 3.0..3.4 -> {
                                 for (i in 1..3) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                             }
-                            3.5 -> {
+                            in 3.5..3.9 -> {
                                 for (i in 1..3) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                                 Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
                             }
-                            4.0 -> {
+                            in 4.0..4.4 -> {
                                 for (i in 1..4) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                             }
-                            4.5 -> {
+                            in 4.5..4.9 -> {
                                 for (i in 1..4) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }

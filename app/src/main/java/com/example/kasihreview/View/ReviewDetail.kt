@@ -43,7 +43,6 @@ import com.example.kasihreview.ui.theme.OpenSans
 
 @Composable
 fun reviewDetail(navController: NavController, viewModel: KRviewModel){
-    var rating = 4.5
     val movie by viewModel.movieDetailsState.collectAsState()
     val ulasanDetail by viewModel.ulasanDetail.collectAsState()
     viewModel.getMovieDetailsById(ulasanDetail.movieId)
@@ -83,7 +82,7 @@ fun reviewDetail(navController: NavController, viewModel: KRviewModel){
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "4.4",
+                        text = ulasanDetail.rating.toString(),
                         fontFamily = OpenSans,
                         fontWeight = FontWeight.Normal,
                         color = Color(0xFFE9A6A6)
@@ -92,48 +91,24 @@ fun reviewDetail(navController: NavController, viewModel: KRviewModel){
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(1.dp)
                     ) {
-                        when (rating) {
-                            0.5 -> Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
-                            1.0 -> Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
-                            1.5 -> {
-                                Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
-                                Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
-                            }
-                            2.0 -> {
+                        when (ulasanDetail.rating) {
+                            1 -> Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
+                            2 -> {
                                 for (i in 1..2) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                             }
-                            2.5 -> {
-                                for (i in 1..2) {
-                                    Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
-                                }
-                                Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
-                            }
-                            3.0 -> {
+                            3 -> {
                                 for (i in 1..3) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                             }
-                            3.5 -> {
-                                for (i in 1..3) {
-                                    Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
-                                }
-                                Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
-                            }
-                            4.0 -> {
+                            4 -> {
                                 for (i in 1..4) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
                             }
-                            4.5 -> {
-                                for (i in 1..4) {
-                                    Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
-                                }
-                                Image(imageVector = ImageVector.vectorResource(R.drawable.half_star), contentDescription = "")
-                            }
-
-                            5.0 -> {
+                            5 -> {
                                 for (i in 1..5) {
                                     Image(imageVector = ImageVector.vectorResource(R.drawable.star), contentDescription = "")
                                 }
