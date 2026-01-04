@@ -144,16 +144,8 @@ fun editUlasanPage(navController: NavController, VM: KRviewModel){
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
+            horizontalArrangement = Arrangement.Start
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.back),
-                contentDescription = "",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate(MovieDetails)
-                    }
-            )
             Text(
                 text = "Tulis Ulasan Anda",
                 fontFamily = OpenSans,
